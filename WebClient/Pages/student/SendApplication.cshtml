@@ -1,0 +1,308 @@
+﻿@page
+@model WebClient.Pages.student.SendApplicationModel
+@{
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper , Microsoft.AspNetCore.Mvc.TagHelpers
+
+<td>
+    <div>
+        <style>
+            .error-message {
+               color: red;
+            }
+
+            body {
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+                background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            }
+
+            .container {
+                max-width: 1000px;
+                width: 100%;
+                background-color: #fff;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+            }
+
+                .container .title {
+                    font-size: 20px;
+                    font-weight: 500;
+                    position: relative;
+                    margin: 15px 0px;
+                }
+
+                    .container .title::before {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        height: 3px;
+                        width: 30px;
+                        border-radius: 5px;
+                        background: linear-gradient(135deg, #71b7e6, #9b59b6);
+                    }
+
+            .content form .user-details {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                margin: 20px 0 12px 0;
+            }
+
+            form .user-details .input-box {
+                margin-bottom: 15px;
+                width: 100%;
+                display: flex;
+            }
+
+            form .input-box span.details {
+                display: block;
+                font-weight: 700;
+                margin-bottom: 5px;
+                float: left;
+                padding: 6px;
+                font-size: 14px;
+                min-width: 250px;
+                width: 280px;
+            }
+
+            form .gender-details .gender-title {
+                font-size: 20px;
+                font-weight: 500;
+            }
+
+            form .category {
+                display: flex;
+                width: 80%;
+                margin: 14px 0;
+                justify-content: space-between;
+            }
+
+                form .category label {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+
+                    form .category label .dot {
+                        height: 18px;
+                        width: 18px;
+                        border-radius: 50%;
+                        margin-right: 10px;
+                        background: #d9d9d9;
+                        border: 5px solid transparent;
+                        transition: all 0.3s ease;
+                    }
+
+            #dot-1:checked ~ .category label .one,
+            #dot-2:checked ~ .category label .two,
+            #dot-3:checked ~ .category label .three {
+                background: #9b59b6;
+                border-color: #d9d9d9;
+            }
+
+            form input[type="radio"] {
+                display: none;
+            }
+
+            form .button {
+                height: 45px;
+                margin: 35px 0;
+            }
+
+            .inp {
+                border: none;
+                border-bottom: 2px dotted #1890ff;
+                padding: 5px;
+                outline: none;
+                width: 100%;
+            }
+
+            [placeholder]:focus::-webkit-input-placeholder {
+                transition: text-indent 0.4s 0.4s ease;
+                text-indent: -100%;
+                opacity: 1;
+            }
+
+            form .button input {
+                height: 100%;
+                width: 100%;
+                border-radius: 5px;
+                border: none;
+                color: #fff;
+                font-size: 18px;
+                font-weight: 500;
+                letter-spacing: 1px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            }
+
+                form .button input:hover {
+                    /* transform: scale(0.99); */
+                    background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+                }
+
+        </style>
+
+
+
+
+        <h2>(Gửi đơn cho Phòng khảo thí)</h2>
+        <div id="ctl00_mainContent_divNote">
+            <p>
+                <em>
+                    <b>
+                        Lưu ý: V/v gửi đơn/email đến các phòng ban
+                        <br>
+                        Bộ phận xử lý đơn sẽ trả lời đơn/ email của sinh viên trong vòng 48h (trừ đơn rút tiền, đơn phúc tra, chuyển cơ sở...).
+                        <br>
+                        Để hạn chế SPAM, sẽ giãn thời gian trả lời đơn/email có tính chất SPAM theo nguyên tắc: Khi sinh viên gửi N đơn/email (N&gt;1) cho cùng một yêu cầu thì thời gian trả lời trong vòng Nx48h.<br>
+                        Vì vậy sinh viên cần cân nhắc trước khi gửi đơn/email với cùng một nội dung để nhận được trả lời/giải quyết nhanh nhất theo quy định.
+                    </b>
+                </em>
+            </p>
+        </div>
+        @if (!String.IsNullOrEmpty(Model.Msg))
+        {
+            <p class="error-message" id="errorMessage">@Model.Msg</p>
+        }
+        <br>
+        <h4>
+            <span id="ctl00_mainContent_lblFinanceInfo">Account balance (Số dư tài khoản): <b>@Model.Student.AccountBalance</b> VNĐ</span>
+        </h4>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td><b>Application type: </b></td>
+                    <td>
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <select class="form-control" style="width:300px;">
+                                        <option selected="selected" value="6">Đề nghị phúc tra </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6">
+                                    <label for="ctl00_mainContent_drpType" id="ctl00_mainContent_lblFee" style="color:Red;font-weight: 700; color: #FF0000">Giá để xử lý thủ tục này là: 200,000</label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <form id="FormSubmit">
+            <div class="content">
+            <div class="user-details">
+                <div class="input-box">
+                    <span class="details">Student Roll No (MS HSSV):</span>
+                    <input type="text" class="inp" readonly placeholder="Student Roll No (MS HSSV)" id="RollNumber" name="id" value="@Model.Student.Id">
+                </div>
+                <div class="input-box">
+                    <span class="details">Student name (Họ và tên):</span>
+                    <input type="text" class="inp" readonly placeholder="Student name (Họ và tên)" id="FullName" name="username" value="@Model.Student.Username">
+                </div>
+
+                <div class="input-box">
+                      <span class="details">Môn thi / Course:</span>
+                       <select class="form-control" style="width:300px;" id="session" name="sessionId" required>
+                            @if (Model.ListSession != null)
+                            {
+                                @foreach (var session in Model.ListSession)
+                                {
+                                        <option value="@session.Id" @(session.Id == Model.CurrentSessonId ? "selected" : "")>
+                                        @session.CourseName
+                                        </option>
+                                }
+                            }
+                     </select>
+                </div>
+
+                 <div class="input-box">
+                      <span class="details">Kỳ thi / Exam type(FE,PE only):</span>
+                       <select class="form-control" style="width:300px;" id="grade" name="gradeId" required>
+                            @if (Model.ListSession != null)
+                            {
+                                @foreach (var grade in Model.ListGrade)
+                                {
+                                         <option value="@grade.Id" @(grade.Id == Model.CurrentGradeId ? "selected" : "")>@grade.Name</option>
+                                }
+                            }
+                     </select>
+                </div>
+
+              
+                <div class="input-box">
+                    <span class="details">
+                        <span id="ctl00_mainContent_lblLydo">Reason (Lý do):</span>
+                    </span>
+                    <textarea name="content" rows="5" cols="20" id="content" class="inp" required></textarea>
+                    <br>
+                </div>
+
+                <input type="submit" name="isSubmit"  value="Gửi Đơn"  class="btn btn-warning">
+            </div>
+        </div>
+        </form>
+        
+        
+
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("FormSubmit");
+        const courseSelect = document.getElementById("session");
+
+        courseSelect.addEventListener("change", function () {
+            form.submit();
+        });
+
+
+    });
+</script>
+
+        <script type="text/javascript">
+            $(function () {
+                $("#Date_Of_DO").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    firstDay: 1
+                });
+            });
+
+            function addCommas(clientID) {
+                var nStr = document.getElementById(clientID.id).value;
+
+                nStr += '';
+                x = nStr.split('.');
+                if (!x[0]) {
+                    x[0] = "0";
+                }
+                x1 = x[0];
+                if (!x[1]) {
+                    x[1] = "00";
+                }
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+
+                document.getElementById(clientID.id).value = x1;
+                return true;
+            }
+
+            function removeCommas(clientID) {
+                var nStr = document.getElementById(clientID.id).value;
+                nStr = nStr.replace(/,/g, '');
+                document.getElementById(clientID.id).value = nStr;
+
+                $(clientID).select();
+
+                return true;
+            }
+        </script>
+    </div>
+</td>

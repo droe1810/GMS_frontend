@@ -1,0 +1,240 @@
+﻿@page
+@model WebClient.Pages.student.ViewGradeModel
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .passed {
+            color: green;
+        }
+
+        .not-passed {
+            color: red;
+        }
+
+        thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        tbody td {
+            text-align: left;
+        }
+
+        tfoot tr {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        tfoot td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+            tfoot td[colspan="3"] {
+                text-align: center;
+            }
+
+        .status {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>View Grade of @Model.CourseName - @Model.ClassName - @Model.TeacherName</h2>
+    <table summary="Report">
+        <thead>
+            <tr>
+                <th>Grade category</th>
+                <th>Grade item</th>
+                <th>Weight</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.ViewGrade.GradeTypes.Count; i++)
+            {
+                var gradeType = Model.ViewGrade.GradeTypes[i];
+                for (int j = 0; j < gradeType.Grades.Count; j++)
+                {
+                    var grade = gradeType.Grades[j];
+                    if (j == 0)
+                    {
+                        <tr>
+                            <td rowspan="@(gradeType.Grades.Count)">@gradeType.GradeTypeName</td>
+                            <td>@grade.GradeName</td>
+                            <td>@grade.Weight %</td>
+                            <td>@grade.Value</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@grade.GradeName</td>
+                            <td>@grade.Weight %</td>
+                            <td>@grade.Value</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td rowspan="2">Course total</td>
+                <td>Average</td>
+                <td colspan="3">@Model.Avg</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td colspan="3" class="status">
+                    @if (Model.Status.isPass)
+                    {
+                        <span class="passed">PASSED</span>
+                    }
+                    else
+                    {
+                        <span class="not-passed">NOT PASSED</span>
+                       @*  <br />
+                        <span>@Model.Status.msg</span> *@
+                    }
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+
+    <a asp-page="/student/Index">
+        Back
+    </a>
+    @*     <table summary="Report">
+    <thead>
+    <tr>
+    <th>Grade category</th>
+    <th>Grade item</th>
+    <th>Weight</th>
+    <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td rowspan="4">Assignment</td>
+    <td>Assignment 1</td>
+    <td>3.3%</td>
+    <td>7</td>
+    </tr>
+    <tr>
+    <td>Assignment 2</td>
+    <td>3.3%</td>
+    <td>7.5</td>
+    </tr>
+    <tr>
+    <td>Assignment 3</td>
+    <td>3.3%</td>
+    <td>8</td>
+    </tr>
+    <tr>
+    <td>Total</td>
+    <td>10.0%</td>
+    <td>7.5</td>
+    </tr>
+    <tr>
+    <td rowspan="3">Progress test</td>
+    <td>Progress test 1</td>
+    <td>5.0%</td>
+    <td>10</td>
+    </tr>
+    <tr>
+    <td>Progress test 2</td>
+    <td>5.0%</td>
+    <td>10</td>
+    </tr>
+    <tr>
+    <td>Total</td>
+    <td>10.0%</td>
+    <td>10</td>
+    </tr>
+    <tr>
+    <td rowspan="2">Group Project</td>
+    <td>Group Project</td>
+    <td>25.0%</td>
+    <td>10</td>
+    </tr>
+    <tr>
+    <td>Total</td>
+    <td>25.0%</td>
+    <td>10</td>
+    </tr>
+    <tr>
+    <td rowspan="2">Practical Exam</td>
+    <td>Practical Exam</td>
+    <td>25.0%</td>
+    <td>4.5</td>
+    </tr>
+    <tr>
+    <td>Total</td>
+    <td>25.0%</td>
+    <td>4.5</td>
+    </tr>
+    <tr>
+    <td rowspan="2">Final exam</td>
+    <td>Final exam</td>
+    <td>30.0%</td>
+    <td>6.4</td>
+    </tr>
+    <tr>
+    <td>Total</td>
+    <td>30.0%</td>
+    <td>6.4</td>
+    </tr>
+
+    <tr>
+    <td>Total</td>
+    <td>30.0%</td>
+    <td></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+    <td rowspan="2">Course total</td>
+    <td>Average</td>
+    <td colspan="3">7.3</td>
+    </tr>
+    <tr>
+    <td>Status</td>
+    <td colspan="3" class="status">Passed</td>
+    </tr>
+    </tfoot>
+    </table>
+    *@
+</body>
+</html>

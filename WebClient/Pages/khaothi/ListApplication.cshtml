@@ -1,0 +1,87 @@
+﻿@page
+@model WebClient.Pages.khaothi.ListApplicationModel
+@{
+}
+
+
+<table>
+    <tbody>
+        <tr style="border-bottom: 0 none">
+            <td>
+                <div>
+                    <h2>Thông tin xử lý đơn từ</h2>
+                    <p>
+                        <span id="ctl00_mainContent_lblFinanceInfo" style="font-weight: 700"></span>
+                    </p>
+                    <div id="ctl00_mainContent_content">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left">Type</th>
+                                    <th style="text-align:left">Student</th>
+                                    <th style="text-align:left">Course-Exam</th>
+                                    <th style="text-align:left">RequestContent</th>
+                                    <th>
+                                        Status
+                                        <a href="#" id="sortAsc" onclick="sortTable(true)">&#9650;</a> <!-- Mũi tên lên -->
+                                        <a href="#" id="sortDesc" onclick="sortTable(false)">&#9660;</a> <!-- Mũi tên xuống -->
+                                    </th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var request in Model.ListRequest)
+                                {
+                                    <tr data-request-status-id="@request.RequestStatusId">
+                                        <td>Đề nghị phúc tra</td>
+                                        <td>@request.StudentId - @request.StudentName</td>
+                                        <td>@request.CourseCode - @request.GradeName</td>
+                                        <td>@request.RequestContent</td>
+                                        <td><p class="text-success"><b>@request.StatusName</b></p></td>
+                                        <td>
+                                            @if (request.RequestStatusId == 1)
+                                            {
+                                                <a>Approved |</a>
+                                                <a>Rejected</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <span id="ctl00_mainContent_lblError"></span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    function sortTable(ascending) {
+        var table = document.querySelector('.table tbody');
+        var rows = Array.from(table.querySelectorAll('tr[data-request-status-id]'));
+
+        rows.sort(function (a, b) {
+            var statusA = parseInt(a.getAttribute('data-request-status-id'));
+            var statusB = parseInt(b.getAttribute('data-request-status-id'));
+
+            if (ascending) {
+                return statusA - statusB;
+            } else {
+                return statusB - statusA;
+            }
+        });
+
+        // Xóa các hàng hiện tại trong bảng
+        while (table.firstChild) {
+            table.removeChild(table.firstChild);
+        }
+
+        // Thêm các hàng đã sắp xếp trở lại vào bảng
+        rows.forEach(function (row) {
+            table.appendChild(row);
+        });
+    }
+</script>
+}

@@ -1,0 +1,56 @@
+﻿@page
+@model WebClient.Pages.khaothi.IndexModel
+@{
+}
+<h2>Graded</h2>
+
+@if (Model.ListGrade != null && Model.ListGrade.Count > 0)
+{
+    <table class="table table-auto">
+        <thead>
+            <tr>
+                <th style="width: 70%;">Grade Name</th>
+                <th style="width: 30%;">Completion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grade in Model.ListGrade)
+            {
+                <tr>
+                    <td>
+                        <a asp-page="/khaothi/Graded"
+                           asp-route-gradeId="@grade.Id"
+                           asp-route-courseId="@grade.CourseId"
+                           asp-route-courseName="@grade.CourseName"
+                           asp-route-gradeName="@grade.Name"
+                           title="Graded for this grade">
+                            @grade.Name - @grade.CourseName
+                        </a>
+                    </td>
+
+                    <td>@grade.Completed (@grade.PercentCompleted%)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>There are no grade for graded.</p>
+}
+
+<style>
+    .table-auto {
+        width: 30%;
+        table-layout: auto; /* Tự động điều chỉnh độ rộng theo nội dung */
+    }
+
+        .table-auto th, .table-auto td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table-auto th {
+            background-color: #f2f2f2;
+        }
+</style>

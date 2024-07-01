@@ -1,0 +1,122 @@
+﻿@page
+@model WebClient.Pages.khaothi.UpdateGradeModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper , Microsoft.AspNetCore.Mvc.TagHelpers
+
+@if (String.IsNullOrEmpty(Model.Username))
+{
+    ViewData["Title"] = "Update Grade";
+}
+else
+{
+    ViewData["Title"] = "Update Grade For " + Model.Username;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<style>
+    .error-message {
+        color: red;
+    }
+
+    .form-container {
+        max-width: 400px; /* Set a maximum width */
+        margin: auto; /* Center the form */
+        padding: 20px; /* Add some padding */
+        border: 1px solid #ccc; /* Add a border */
+        border-radius: 10px; /* Round the corners */
+        background-color: #f9f9f9; /* Light grey background */
+    }
+
+    .form-group {
+        margin-bottom: 15px; /* Space out the form groups */
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+</style>
+
+
+
+<div class="form-container">
+    @if (!String.IsNullOrEmpty(Model.Msg))
+    {
+        <p class="error-message" id="errorMessage">@Model.Msg</p>
+    }
+
+    <form method="post" id="updateGradeForm">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" value="@Model.Username" />
+        </div>
+
+        <div class="form-group">
+            <label for="session">Course:</label>
+            <select class="form-control" id="session" name="sessionId">
+                @if (Model.ListSession != null)
+                {
+                    @foreach (var session in Model.ListSession)
+                    {
+                        <option value="@session.Id" @(session.Id == Model.CurrentSessonId ? "selected" : "")>@session.CourseName</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="grade">Grade:</label>
+            <select class="form-control" id="grade" name="gradeId">
+                @if (Model.ListGrade != null)
+                {
+                    @foreach (var grade in Model.ListGrade)
+                    {
+                        <option value="@grade.Id" @(grade.Id == Model.CurrentGradeId ? "selected" : "")>@grade.Name</option>
+                    }
+                }
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="newGradeValue">New Grade Value:</label>
+            <input type="number" class="form-control" id="newGradeValue" name="newGradeValue"  required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Grade</button>
+    </form>
+
+    <div style="margin-top: 15px;">
+        <a class="btn btn-secondary" asp-page="/khaothi/Index">Back</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("updateGradeForm");
+        const usernameInput = document.getElementById("username");
+        const courseSelect = document.getElementById("session");
+
+        usernameInput.addEventListener("change", function () {
+            form.submit();
+        });
+
+        courseSelect.addEventListener("change", function () {
+            form.submit();
+        });
+
+        // Hide the error message after 3 seconds
+        const errorMessage = document.getElementById("errorMessage");
+        if (errorMessage) {
+            setTimeout(function () {
+                errorMessage.style.display = "none";
+            }, 3000);
+        }
+    });
+</script>
+

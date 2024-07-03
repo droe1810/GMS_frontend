@@ -27,6 +27,10 @@ namespace WebClient.Pages.student
                 return RedirectToPage("/Login");
             }
             GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
+            u = UserService.GetStudent(u.Username);
+
+            userJson = JsonSerializer.Serialize(u);
+            _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
             try
             {
                 ListSession = SessionService.GetSessionByStudent(u.Id);

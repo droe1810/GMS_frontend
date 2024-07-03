@@ -30,6 +30,13 @@ namespace WebClient.Pages.student
         {
             string userJson = _httpContextAccessor.HttpContext.Session.GetString("currentUser");
             GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
+
+
+            u = UserService.GetStudent(u.Username);
+
+            userJson = JsonSerializer.Serialize(u);
+            _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
+
             Student = u;
             ListSession = SessionService.GetSessionByStudent(u.Id);
             if (sessionId == null)

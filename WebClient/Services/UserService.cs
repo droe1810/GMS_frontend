@@ -82,6 +82,48 @@ namespace WebClient.Services
             return result;
         }
 
+        public static AccountBalanceDTO ReFund(int studentId)
+        {
+            AccountBalanceDTO result = new AccountBalanceDTO();
+            using (HttpClient client = new HttpClient())
+            {
+                string url = $"http://localhost:5100/api/User/Refund/{studentId}";
+
+                // Tạo yêu cầu PATCH
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Patch, url);
+
+                HttpResponseMessage response = client.SendAsync(request).Result;
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    result = response.Content.ReadFromJsonAsync<AccountBalanceDTO>().Result;
+                }
+
+            }
+
+            return result;
+        }
+
+        public static AccountBalanceDTO Recharge(int studentId, int value)
+        {
+            AccountBalanceDTO result = new AccountBalanceDTO();
+            using (HttpClient client = new HttpClient())
+            {
+                string url = $"http://localhost:5100/api/User/Recharge/{studentId}/{value}";
+
+                // Tạo yêu cầu PATCH
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Patch, url);
+
+                HttpResponseMessage response = client.SendAsync(request).Result;
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    result = response.Content.ReadFromJsonAsync<AccountBalanceDTO>().Result;
+                }
+
+            }
+
+            return result;
+        }
+
 
     }
 }

@@ -26,15 +26,24 @@ namespace WebClient.Services
             return result;
         }
 
-        public static void UpdateRequest(int requestId, int newValue)
+        public static ResultForUpdateRequestDTO UpdateRequest(int requestId, int newValue)
         {
             HttpClient client = new HttpClient();
+            ResultForUpdateRequestDTO result = null;
+
 
             string url = $"http://localhost:5100/api/Request/UpdateRequest/{requestId}/{newValue}\r\n";
 
             var request = new HttpRequestMessage(HttpMethod.Patch, url);
 
             HttpResponseMessage response = client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                result = response.Content.ReadFromJsonAsync<ResultForUpdateRequestDTO>().Result;
+            }
+
+
+            return result;
         }
 
 

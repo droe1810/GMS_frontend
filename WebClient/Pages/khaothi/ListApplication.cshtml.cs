@@ -13,5 +13,20 @@ namespace WebClient.Pages.khaothi
             ListRequest = RequestService.GetAll();
             return Page();
         }
+
+        public IActionResult OnPost(int studentId, int gradeId, int newGrade)
+        {
+            List<GetRequestDTO> ListAll = RequestService.GetAll();
+            foreach (GetRequestDTO request in ListAll) {
+                if(request.RequestStatusId == 1 && request.StudentId == studentId && request.GradeId == gradeId)
+                {
+                    RequestService.UpdateRequest(request.RequestId, newGrade);
+                }
+                
+            }
+
+            ListRequest = RequestService.GetAll();
+            return Page();
+        }
     }
 }

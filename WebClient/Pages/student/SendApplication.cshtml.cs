@@ -61,7 +61,7 @@ namespace WebClient.Pages.student
                         }
                         else
                         {
-                            Msg = result.msg;
+                            Msg = "Send Application fail, " + result.msg;
                         }
                     }
                 }

@@ -3,7 +3,6 @@
 @{
 }
 
-
 <table>
     <tbody>
         <tr style="border-bottom: 0 none">
@@ -14,41 +13,60 @@
                         <span id="ctl00_mainContent_lblFinanceInfo" style="font-weight: 700"></span>
                     </p>
                     <div id="ctl00_mainContent_content">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:left">Type</th>
-                                    <th style="text-align:left">Student</th>
-                                    <th style="text-align:left">Course-Exam</th>
-                                    <th style="text-align:left">RequestContent</th>
-                                    <th>
-                                        Status
-                                        <a href="#" id="sortAsc" onclick="sortTable(true)">&#9650;</a> <!-- Mũi tên lên -->
-                                        <a href="#" id="sortDesc" onclick="sortTable(false)">&#9660;</a> <!-- Mũi tên xuống -->
-                                    </th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var request in Model.ListRequest)
-                                {
-                                    <tr data-request-status-id="@request.RequestStatusId">
-                                        <td>Đề nghị phúc tra</td>
-                                        <td>@request.StudentId - @request.StudentName</td>
-                                        <td>@request.CourseCode - @request.GradeName</td>
-                                        <td>@request.RequestContent</td>
-                                        <td><p class="text-success"><b>@request.StatusName</b></p></td>
-                                        <td>
-                                            @if (request.RequestStatusId == 1)
-                                            {
-                                                <a>Approved |</a>
-                                                <a>Rejected</a>
-                                            }
-                                        </td>
+                        <form method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left">Type</th>
+                                        <th style="text-align:left">
+                                            Student
+                                            <a href="#" onclick="sortTable('student', true)">&#9650;</a> <!-- Mũi tên lên -->
+                                            <a href="#" onclick="sortTable('student', false)">&#9660;</a> <!-- Mũi tên xuống -->
+                                        </th>
+                                        <th style="text-align:left">
+                                            Course
+                                            <a href="#" onclick="sortTable('course', true)">&#9650;</a> <!-- Mũi tên lên -->
+                                            <a href="#" onclick="sortTable('course', false)">&#9660;</a> <!-- Mũi tên xuống -->
+                                        </th>
+                                        <th style="text-align:left">
+                                            Exam
+                                            <a href="#" onclick="sortTable('exam', true)">&#9650;</a> <!-- Mũi tên lên -->
+                                            <a href="#" onclick="sortTable('exam', false)">&#9660;</a> <!-- Mũi tên xuống -->
+                                        </th>
+                                        <th style="text-align:left">RequestContent</th>
+                                        <th>
+                                            Status
+                                            <a href="#" onclick="sortTable('status', true)">&#9650;</a> <!-- Mũi tên lên -->
+                                            <a href="#" onclick="sortTable('status', false)">&#9660;</a> <!-- Mũi tên xuống -->
+                                        </th>
+                                        <th>Regraded grade</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var request in Model.ListRequest)
+                                    {
+                                        <tr data-request-status-id="@request.RequestStatusId" data-course="@request.CourseCode" data-exam="@request.GradeName" data-student="@request.StudentName">
+                                            <td>Đề nghị phúc tra</td>
+                                            <td>@request.StudentId - @request.StudentName</td>
+                                            <td>@request.CourseCode</td>
+                                            <td>@request.GradeName</td>
+                                            <td>@request.RequestContent</td>
+                                            <td><p class="text-success"><b>@request.StatusName</b></p></td>
+                                            <td>
+                                                @if (request.RequestStatusId == 1)
+                                                {
+                                                    <input type="number" min="0" max="10" step="1" name="newGrade" />
+                                                    <input type="hidden" name="studentId" value="@request.StudentId" />
+                                                    <input type="hidden" name="gradeId" value="@request.GradeId" />
+                                                    <input type="submit" value="Submit" />
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </form>
+                     
                     </div>
                     <span id="ctl00_mainContent_lblError"></span>
                 </div>
@@ -58,18 +76,31 @@
 </table>
 
 <script>
-    function sortTable(ascending) {
+    function sortTable(criteria, ascending) {
         var table = document.querySelector('.table tbody');
         var rows = Array.from(table.querySelectorAll('tr[data-request-status-id]'));
 
         rows.sort(function (a, b) {
-            var statusA = parseInt(a.getAttribute('data-request-status-id'));
-            var statusB = parseInt(b.getAttribute('data-request-status-id'));
+            var valueA, valueB;
+
+            if (criteria === 'status') {
+                valueA = parseInt(a.getAttribute('data-request-status-id'));
+                valueB = parseInt(b.getAttribute('data-request-status-id'));
+            } else if (criteria === 'course') {
+                valueA = a.getAttribute('data-course').toLowerCase();
+                valueB = b.getAttribute('data-course').toLowerCase();
+            } else if (criteria === 'exam') {
+                valueA = a.getAttribute('data-exam').toLowerCase();
+                valueB = b.getAttribute('data-exam').toLowerCase();
+            } else if (criteria === 'student') {
+                valueA = a.getAttribute('data-student').toLowerCase();
+                valueB = b.getAttribute('data-student').toLowerCase();
+            }
 
             if (ascending) {
-                return statusA - statusB;
+                return (valueA > valueB) ? 1 : (valueA < valueB) ? -1 : 0;
             } else {
-                return statusB - statusA;
+                return (valueA < valueB) ? 1 : (valueA > valueB) ? -1 : 0;
             }
         });
 
@@ -84,4 +115,3 @@
         });
     }
 </script>
-}

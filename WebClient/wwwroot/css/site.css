@@ -16,3 +16,18 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*body {
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.container {
+    max-width: 1000px;
+    width: 100%;
+
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}*/

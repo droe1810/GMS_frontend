@@ -26,6 +26,17 @@ namespace WebClient.Services
             return result;
         }
 
+        public static void UpdateRequest(int requestId, int newValue)
+        {
+            HttpClient client = new HttpClient();
+
+            string url = $"http://localhost:5100/api/Request/UpdateRequest/{requestId}/{newValue}\r\n";
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, url);
+
+            HttpResponseMessage response = client.SendAsync(request).Result;
+        }
+
 
         public static List<GetRequestDTO> GetRequestByStudent(int studentId)
         {

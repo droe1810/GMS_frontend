@@ -72,6 +72,16 @@
 </head>
 <body>
     <h2 class="title">View Grade of @Model.CourseName - @Model.ClassName - @Model.TeacherName</h2>
+    <div>
+        <a class="export-link" asp-page-handler="ExportExcel"
+           asp-route-courseId="@Model.CourseId"
+           asp-route-courseName="@Model.CourseName">
+           Export to Excel
+       </a>
+    </div>
+
+
+
     <table summary="Report">
         <thead>
             <tr>

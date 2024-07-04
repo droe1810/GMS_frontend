@@ -159,3 +159,18 @@ body {
         background-color: #0056b3;
         color: white;
     }
+
+
+.export-link {
+    font-size: 16px;
+    color: blue;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+    .export-link:hover {
+        color: green;
+        transform: scale(1.05);
+    }
+

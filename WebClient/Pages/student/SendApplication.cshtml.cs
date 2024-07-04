@@ -19,7 +19,7 @@ namespace WebClient.Pages.student
         public int CurrentGradeId { get; set; }
         public int CurrentSessonId { get; set; }
 
-        public string Msg {  get; set; }
+        public string Msg { get; set; }
 
         public SendApplicationModel(IHttpContextAccessor httpContextAccessor)
         {
@@ -32,49 +32,57 @@ namespace WebClient.Pages.student
             GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
 
 
-            u = UserService.GetStudent(u.Username);
-
-            userJson = JsonSerializer.Serialize(u);
-            _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
-
-            Student = u;
-            ListSession = SessionService.GetSessionByStudent(u.Id);
-            if (sessionId == null)
+            try
             {
-                ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);
-            }
-            else
-            {
-                ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi((int)sessionId);
-                CurrentSessonId = (int)sessionId;
+                u = UserService.GetStudent(u.Username);
 
-                if (gradeId != null)
+                userJson = JsonSerializer.Serialize(u);
+                _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
+
+                Student = u;
+
+
+                ListSession = SessionService.GetSessionByStudent(u.Id);
+                if (sessionId == null)
                 {
-                    CurrentGradeId = (int)gradeId;
+                    ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);
+                }
+                else
+                {
+                    ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi((int)sessionId);
+                    CurrentSessonId = (int)sessionId;
 
-                    if (!string.IsNullOrEmpty(isSubmit))
+                    if (gradeId != null)
                     {
-                        ResultForCreateRequestDTO result = RequestService.CreateRequest(u.Id, (int)gradeId, content);
-                        if(result.IsSuccess == true)
-                        {
-                            Msg = "Send application success";
-                            AccountBalanceDTO  deductFunds = UserService.DeductFunds(u.Id);
-                            u.AccountBalance = deductFunds.NewAccountBalance;
+                        CurrentGradeId = (int)gradeId;
 
-                            Student = u;
-
-                            userJson = JsonSerializer.Serialize(u);
-                            _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
-                        }
-                        else
+                        if (!string.IsNullOrEmpty(isSubmit))
                         {
-                            Msg = "Send Application fail, " + result.msg;
+                            ResultForCreateRequestDTO result = RequestService.CreateRequest(u.Id, (int)gradeId, content);
+                            if (result.IsSuccess == true)
+                            {
+                                Msg = "Send application success";
+                                AccountBalanceDTO deductFunds = UserService.DeductFunds(u.Id);
+                                u.AccountBalance = deductFunds.NewAccountBalance;
+
+                                Student = u;
+
+                                userJson = JsonSerializer.Serialize(u);
+                                _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
+                            }
+                            else
+                            {
+                                Msg = "Send Application fail, " + result.msg;
+                            }
                         }
                     }
                 }
+                return Page();
             }
-            return Page();
-
+            catch
+            {
+                return RedirectToPage("/SeverError");
+            }
         }
     }
 }

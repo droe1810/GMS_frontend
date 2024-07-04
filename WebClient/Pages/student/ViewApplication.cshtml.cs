@@ -22,14 +22,21 @@ namespace WebClient.Pages.student
         {
             string userJson = _httpContextAccessor.HttpContext.Session.GetString("currentUser");
             GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
+            try
+            {
+                u = UserService.GetStudent(u.Username);
 
-            u = UserService.GetStudent(u.Username);
+                userJson = JsonSerializer.Serialize(u);
+                _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
 
-            userJson = JsonSerializer.Serialize(u);
-            _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
 
-            ListRequest = RequestService.GetRequestByStudent(u.Id);
-            return Page();
+                ListRequest = RequestService.GetRequestByStudent(u.Id);
+                return Page();
+            }
+            catch (Exception)
+            {
+                return RedirectToPage("/SeverError");
+            }
         }
     }
 }

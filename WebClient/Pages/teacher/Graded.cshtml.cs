@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.SignalR;
+using TimetableSystem.Services;
 using WebClient.DTO.User;
 using WebClient.Services;
 
@@ -9,7 +10,12 @@ namespace WebClient.Pages.teacher
 {
     public class GradedModel : PageModel
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
+        public GradedModel(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
         public List<GetUserDTO> ListUserDTO { get; set; }
 
         public int SessionId { get; set; }
@@ -21,6 +27,13 @@ namespace WebClient.Pages.teacher
 
         public IActionResult OnGet(int sessionId, string className, string courseName, int gradeId, string gradeName)
         {
+            GetUserDTO user = AuthenticationHelper.GetAuthenticatedUser(_httpContextAccessor.HttpContext);
+
+            if (user == null || !AuthenticationHelper.IsTeacher(user))
+            {
+                return Redirect("/AccessDenied");
+            }
+
             try
             {
                 GetData(sessionId, className, courseName, gradeId, gradeName);
@@ -36,6 +49,13 @@ namespace WebClient.Pages.teacher
 
         public async Task<IActionResult> OnPost(List<int> studentIds, List<decimal> grades, int sessionId, string className, string courseName, int gradeId, string gradeName)
         {
+            GetUserDTO user = AuthenticationHelper.GetAuthenticatedUser(_httpContextAccessor.HttpContext);
+
+            if (user == null || !AuthenticationHelper.IsTeacher(user))
+            {
+                return Redirect("/AccessDenied");
+            }
+
             int countFalse = 0;
             for (int i = 0; i < studentIds.Count; i++)
             {

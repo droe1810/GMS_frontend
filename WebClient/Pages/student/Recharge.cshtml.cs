@@ -19,15 +19,20 @@ namespace WebClient.Pages.student
         {
             string userJson = _httpContextAccessor.HttpContext.Session.GetString("currentUser");
 
-
             GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
+            try
+            {
+                AccountBalanceDTO recharge = UserService.Recharge(u.Id, amount);
+                u.AccountBalance = recharge.NewAccountBalance;
 
-            AccountBalanceDTO recharge = UserService.Recharge(u.Id, amount);
-            u.AccountBalance = recharge.NewAccountBalance;
-
-            userJson = JsonSerializer.Serialize(u);
-            _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
-            return RedirectToPage("/student/Index");
+                userJson = JsonSerializer.Serialize(u);
+                _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
+                return RedirectToPage("/student/Index");
+            }
+            catch
+            {
+                return RedirectToPage("/SeverError");
+            }
         }
     }
 }

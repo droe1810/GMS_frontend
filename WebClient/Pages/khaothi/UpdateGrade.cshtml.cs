@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using TimetableSystem.Services;
 using WebClient.DTO.Grade;
 using WebClient.DTO.Session;
 using WebClient.DTO.User;
@@ -9,6 +10,12 @@ namespace WebClient.Pages.khaothi
 {
     public class UpdateGradeModel : PageModel
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UpdateGradeModel(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
         public int UserId { get; set; }
         public string Username { get; set; }
 
@@ -19,53 +26,76 @@ namespace WebClient.Pages.khaothi
         public List<GetGradeDTO> ListGrade { get; set; }
 
         public string Msg { get; set; }
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            GetUserDTO user = AuthenticationHelper.GetAuthenticatedUser(_httpContextAccessor.HttpContext);
+
+            if (user == null || !AuthenticationHelper.IsKhaoThi(user))
+            {
+                return Redirect("/AccessDenied");
+            }
+
+            return Page();
         }
 
         public IActionResult OnPost(string username, int? sessionId, int? gradeId, int? newGradeValue)
         {
-            GetUserDTO u = UserService.GetStudent(username);
+            GetUserDTO user = AuthenticationHelper.GetAuthenticatedUser(_httpContextAccessor.HttpContext);
 
-            if(u.Username == null)
+            if (user == null || !AuthenticationHelper.IsKhaoThi(user))
             {
-                Username = username;
-                Msg = "No Student Found";
-                return Page();
+                return Redirect("/AccessDenied");
             }
 
-            Username = u.Username;
-            ListSession = SessionService.GetSessionByStudent(u.Id);
-
-            if (sessionId == null)
+            try
             {
-                ListGrade = GradeService.GetGradesBySessionGradedByTeacher(ListSession[0].Id);
-            }
-            else
-            {
-                ListGrade = GradeService.GetGradesBySessionGradedByTeacher((int)sessionId);
-                CurrentSessonId = (int)sessionId;
+                GetUserDTO u = UserService.GetStudent(username);
 
-                if(gradeId != null)
+                if (u.Username == null)
                 {
-                    CurrentGradeId = (int)gradeId;
-                    if(newGradeValue != null)
+                    Username = username;
+                    Msg = "No Student Found";
+                    return Page();
+                }
+
+                Username = u.Username;
+                ListSession = SessionService.GetSessionByStudent(u.Id);
+
+                if (sessionId == null)
+                {
+                    ListGrade = GradeService.GetGradesBySessionGradedByTeacher(ListSession[0].Id);
+                }
+                else
+                {
+                    ListGrade = GradeService.GetGradesBySessionGradedByTeacher((int)sessionId);
+                    CurrentSessonId = (int)sessionId;
+
+                    if (gradeId != null)
                     {
-                        bool updateSuccess = StudentGradeService.UpdateGradeForStudent((int)gradeId, u.Id, (decimal)newGradeValue);
-
-                        if (updateSuccess)
+                        CurrentGradeId = (int)gradeId;
+                        if (newGradeValue != null)
                         {
-                            Msg = "Update success";
+                            bool updateSuccess = StudentGradeService.UpdateGradeForStudent((int)gradeId, u.Id, (decimal)newGradeValue);
 
-                        }
-                        else
-                        {
-                            Msg = "Update fail";
+                            if (updateSuccess)
+                            {
+                                Msg = "Update success";
+
+                            }
+                            else
+                            {
+                                Msg = "Update fail";
+                            }
                         }
                     }
                 }
+                return Page();
+
             }
-            return Page();
+            catch
+            {
+                return Redirect("/SeverError");
+            }
         }
     }
 }

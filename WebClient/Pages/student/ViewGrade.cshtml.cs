@@ -39,7 +39,14 @@ namespace WebClient.Pages.student
             }
             GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
 
-            u = UserService.GetStudent(u.Username);
+            try
+            {
+                u = UserService.GetStudent(u.Username);
+            }
+            catch
+            {
+                return RedirectToPage("/SeverError");
+            }
 
             userJson = JsonSerializer.Serialize(u);
             _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
@@ -49,12 +56,16 @@ namespace WebClient.Pages.student
             CourseName = courseName;
             ClassName = className;
             TeacherName = teacherName;
-
-            ViewGrade = StudentGradeService.StudentViewGrade(u.Id, courseId);
-            Avg = SessionStudentService.GetAvgGrade(courseId, u.Id);
-            Status = SessionStudentService.GetStatus(courseId, u.Id);
-
-
+            try
+            {
+                ViewGrade = StudentGradeService.StudentViewGrade(u.Id, courseId);
+                Avg = SessionStudentService.GetAvgGrade(courseId, u.Id);
+                Status = SessionStudentService.GetStatus(courseId, u.Id);
+            }
+            catch 
+            {
+                return RedirectToPage("/SeverError");
+            }
             return Page();
         }
     }

@@ -2,11 +2,23 @@
 @model WebClient.Pages.khaothi.IndexModel
 @{
 }
-<h2>Graded</h2>
+<style>
+    .table-custom {
+        width: 30%;
+        table-layout: auto; /* Tự động điều chỉnh độ rộng theo nội dung */
+    }
+
+        .table-custom th, .table-custom td {
+            padding: 8px;
+            text-align: left;
+        }
+</style>
+
+<h2 class="title">Graded</h2>
 
 @if (Model.ListGrade != null && Model.ListGrade.Count > 0)
 {
-    <table class="table table-auto">
+    <table class="table table-custom">
         <thead>
             <tr>
                 <th style="width: 70%;">Grade Name</th>
@@ -39,18 +51,4 @@ else
     <p>There are no grade for graded.</p>
 }
 
-<style>
-    .table-auto {
-        width: 30%;
-        table-layout: auto; /* Tự động điều chỉnh độ rộng theo nội dung */
-    }
 
-        .table-auto th, .table-auto td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        .table-auto th {
-            background-color: #f2f2f2;
-        }
-</style>

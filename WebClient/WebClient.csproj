@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\teacher\Graded.cshtml~RF13f9cbd.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Pages\admin\" />
   </ItemGroup>
 

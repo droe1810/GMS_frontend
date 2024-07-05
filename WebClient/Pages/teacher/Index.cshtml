@@ -1,6 +1,6 @@
 ﻿@page
 @model WebClient.Pages.teacher.IndexModel
-@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject IHttpContextAccessor HttpContextAccessor;
 @using Newtonsoft.Json
 @using WebClient.DTO.User;
@@ -8,15 +8,13 @@
     var json = HttpContextAccessor.HttpContext.Session.GetString("currentUser");
     var user = json != null ? JsonConvert.DeserializeObject<GetUserDTO>(json) : null;
     var sessionTitle = user != null ? $"List of {user.Username}'s Session" : "Session List";
-
 }
 
-<h2>@sessionTitle</h2>
+<h2 class="title">@sessionTitle</h2>
 
 @if (Model.ListSession != null && Model.ListSession.Count > 0)
 {
-
-    <table class="table">
+    <table class="table-custom">
         <thead>
             <tr>
                 <th> Session Name</th>

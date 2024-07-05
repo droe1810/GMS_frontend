@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
+using TimetableSystem.Services;
 using WebClient.DTO.Session;
 using WebClient.DTO.User;
 using WebClient.Services;
@@ -19,22 +20,22 @@ namespace WebClient.Pages.teacher
         }
         public IActionResult OnGet()
         {
-            string userJson = _httpContextAccessor.HttpContext.Session.GetString("currentUser");
+            GetUserDTO user = AuthenticationHelper.GetAuthenticatedUser(_httpContextAccessor.HttpContext);
 
-            if (string.IsNullOrEmpty(userJson))
+            if (user == null || !AuthenticationHelper.IsTeacher (user))
             {
-                return RedirectToPage("/Login");
+                return Redirect("/AccessDenied");
             }
-            GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
+
             try
             {
-                ListSession = SessionService.GetSessionByTeacher(u.Id);
+                ListSession = SessionService.GetSessionByTeacher(user.Id);
+                return Page();
             }
             catch (Exception)
             {
                 return RedirectToPage("/SeverError");
             }
-            return Page();
         }
     }
 }

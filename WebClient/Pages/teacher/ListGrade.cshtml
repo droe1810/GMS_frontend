@@ -2,28 +2,9 @@
 @addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
 @model WebClient.Pages.teacher.ListGradeModel
 
-<style>
-    .button-link {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: white;
-        background-color: #007bff;
-        border: none;
-        border-radius: 5px;
-        text-align: center;
-        text-decoration: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
 
-        .button-link:hover {
-            background-color: #0056b3;
-            color: white;
-        }
-</style>
 
-<h2>Grades for  @Model.CourseName - @Model.ClassName</h2>
+<h2 class="title">Grades for  @Model.CourseName - @Model.ClassName</h2>
 
 @if (Model.ListGrade != null && Model.ListGrade.Count > 0)
 {
@@ -35,7 +16,7 @@
         View Grade
     </a>
 
-    <table class="table">
+    <table class="table-custom">
         <thead>
             <tr>
                 <th>Grade Name</th>
@@ -66,4 +47,4 @@ else
     <p>No grades available for this session.</p>
 }
 
-<a asp-page="/teacher/Index">Back</a>
+<a class="back-link" asp-page="/teacher/Index">Back</a>

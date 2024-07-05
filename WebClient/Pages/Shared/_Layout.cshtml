@@ -104,6 +104,9 @@
 
                             @if (user == null)
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                </li>
                                 <li class="nav-item" style="float: right">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/guest/login">Login</a>
                                 </li>
@@ -126,6 +129,8 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+            <vc:random-ascii-art></vc:random-ascii-art>
+
         </main>
     </div>
 

@@ -3,7 +3,11 @@
 @{
 }
 <style>
-
+    .arrows a {
+        text-decoration: none;
+        color: black;
+        margin-left: 2px; /* khoảng cách giữa tiêu đề và mũi tên */
+    }
 </style>
 
 
@@ -12,18 +16,18 @@
         <tr style="border-bottom: 0 none">
             <td>
                 <div>
-                    <h2>Thông tin xử lý đơn từ</h2>
+                    <h2 class="title">Thông tin xử lý đơn từ</h2>
                     <p>
                         <span id="ctl00_mainContent_lblFinanceInfo" style="font-weight: 700"></span>
                     </p>
                     <div id="ctl00_mainContent_content">
-                        <table class="table table-bordered">
+                        <table class="table">
                             <thead>
                                 <tr>
-                                    <th style="text-align:left">Type</th>
-                                    <th style="text-align:left">RequestContent</th>
-                                    <th style="text-align:left">ResponeContent</th>
-                                    <th>
+                                    <th>Type</th>
+                                    <th>RequestContent</th>
+                                    <th>ResponeContent</th>
+                                    <th class="arrows">
                                         Status
                                         <a href="#" id="sortAsc" onclick="sortTable(true)">&#9650;</a> <!-- Mũi tên lên -->
                                         <a href="#" id="sortDesc" onclick="sortTable(false)">&#9660;</a> <!-- Mũi tên xuống -->

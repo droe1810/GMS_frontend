@@ -7,7 +7,7 @@
 @removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper , Microsoft.AspNetCore.Mvc.TagHelpers
 
 <td>
-    <div>
+    <div class="card p-5 mt-5">
         <style> 
             body {
                 background: linear-gradient(135deg, #71b7e6, #9b59b6);
@@ -212,8 +212,9 @@
                     <textarea name="content" rows="5" cols="20" id="content" class="inp" required></textarea>
                     <br>
                 </div>
-
-                <input type="submit" name="isSubmit"  value="Gửi Đơn"  class="btn btn-warning">
+                <div class="d-flex justify-content-center mt-5">
+                    <input type="submit" name="isSubmit"  value="Gửi Đơn"  class="btn btn-warning text-light">
+                </div>
             </div>
         </div>
         </form>

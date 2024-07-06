@@ -10,6 +10,7 @@ using WebClient.Services;
 using OfficeOpenXml;
 using System.IO;
 using OfficeOpenXml.Table;
+using WebClient.DTO.Session;
 
 namespace WebClient.Pages.student
 {
@@ -32,9 +33,33 @@ namespace WebClient.Pages.student
         public decimal Avg { get; set; }
 
         public GetStatusDTO Status { get; set; }
+        public List<GetSessionDTO> ListSession { get; set; }
 
+        public IActionResult OnGet()
+        {
+            string userJson = _httpContextAccessor.HttpContext.Session.GetString("currentUser");
 
-        public IActionResult OnGet(int sessionId, int courseId, string courseName, string className, string teacherName)
+            if (string.IsNullOrEmpty(userJson))
+            {
+                return RedirectToPage("/guest/Login");
+            }
+            GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
+            u = UserService.GetStudent(u.Username);
+
+            userJson = JsonSerializer.Serialize(u);
+            _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
+
+            try
+            {
+                ListSession = SessionService.GetSessionByStudent(u.Id);
+            }
+            catch (Exception)
+            {
+                return RedirectToPage("/SeverError");
+            }
+            return Page();
+        }
+        public IActionResult OnGetGrade(int sessionId, int courseId, string courseName, string className, string teacherName)
         {
             string userJson = _httpContextAccessor.HttpContext.Session.GetString("currentUser");
 
@@ -71,6 +96,7 @@ namespace WebClient.Pages.student
             {
                 return RedirectToPage("/SeverError");
             }
+            OnGet();
             return Page();
         }
 

@@ -13,38 +13,45 @@
 
 }
 
-<h2 class="title">@sessionTitle</h2>
 
-@if (Model.ListSession != null && Model.ListSession.Count > 0)
-{
+<div class="center">
+    <div class="card mb-3">
+        <div class=" d-flex justify-content-center pt-2 pb-2">
+            <img src="https://cdn-icons-png.flaticon.com/512/1836/1836327.png" alt="timeTable" width="50" height="50" />
+            <p class="ms-2 mt-3 text-uppercase text-secondary">Time Table</p>
+        </div>
 
-    <table class="table-custom">
-        <thead>
-            <tr>
-                <th> Session Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var session in Model.ListSession)
-            {
-                <tr>
-                    <td>
-                        <a asp-page="/student/ViewGrade"
-                           asp-route-sessionId="@session.Id"
-                           asp-route-courseId="@session.CourseId"
-                           asp-route-courseName="@session.CourseName"
-                           asp-route-className="@session.ClassName"
-                           asp-route-teacherName="@session.TeacherName"
-                           title="View Grade">
-                            @session.ClassName - @session.CourseName - @session.TeacherName
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>There are no sessions.</p>
-}
+    </div>
+    <a asp-page="/student/ViewGrade" class="card mb-3 text-decoration-none">
+        <div class=" d-flex justify-content-center pt-2 pb-2">
+            <img src="https://cdn-icons-png.flaticon.com/512/748/748449.png" alt="viewGrade" width="50" height="50" />
+            <p class="ms-2 mt-3 text-uppercase text-secondary">View Grade</p>
+        </div>
+    </a>
+    <a asp-page="/student/SendApplication" class="card mb-3 text-decoration-none">
+        <div class=" d-flex justify-content-center pt-2 pb-2">
+            <img src="https://cdn-icons-png.flaticon.com/512/4698/4698732.png" alt="sendApplication" width="50" height="50" />
+            <p class="ms-2 mt-3 text-uppercase text-secondary">Send Application</p>
+        </div>
+    </a>
+    <a asp-page="/student/ViewApplication" class="card mb-3 text-decoration-none">
+        <div class=" d-flex justify-content-center pt-2 pb-2">
+            <img src="https://png.pngtree.com/png-vector/20220623/ourmid/pngtree-web-tiles-view-windows-application-png-image_5289603.png" alt="viewApplication" width="50" height="50" />
+            <p class="ms-2 mt-3 text-uppercase text-secondary">View Application</p>
+        </div>
+    </a>
+</div>
+
+<style>
+    .center{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .card{
+        border-radius: 0;
+        width: 30vw;
+    }
+</style>
+

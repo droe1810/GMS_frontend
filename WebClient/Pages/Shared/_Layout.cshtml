@@ -18,8 +18,8 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+            <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-page="#">GMS</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -126,7 +126,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid bg">
         <main role="main" class="pb-3">
             @RenderBody()
             <vc:random-ascii-art></vc:random-ascii-art>
@@ -135,7 +135,7 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container-fluid text-center">
             &copy; GMS - Summer 2024 - SE1701.Net - PRN231 - DuongPv - <a asp-area="" asp-page="/">Privacy</a>
         </div>
     </footer>

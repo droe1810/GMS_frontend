@@ -1,6 +1,13 @@
 ﻿@page
 @model WebClient.Pages.student.ViewGradeModel
+@inject IHttpContextAccessor HttpContextAccessor;
+@using Newtonsoft.Json
+@using WebClient.DTO.User;
 @{
+    var json = HttpContextAccessor.HttpContext.Session.GetString("currentUser");
+    var user = json != null ? JsonConvert.DeserializeObject<GetUserDTO>(json) : null;
+    var sessionTitle = user != null ? $"List of {user.Username}'s Session" : "Session List";
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -71,180 +78,121 @@
     </style>
 </head>
 <body>
-    <h2 class="title">View Grade of @Model.CourseName - @Model.ClassName - @Model.TeacherName</h2>
-    <div>
-        <a class="export-link" asp-page-handler="ExportExcel"
-           asp-route-courseId="@Model.CourseId"
-           asp-route-courseName="@Model.CourseName">
-           Export to Excel
-       </a>
-    </div>
+    <div class="d-flex justify-content-center mt-3">
+        <div>
+            <h2 class="title">@sessionTitle</h2>
 
-
-
-    <table summary="Report">
-        <thead>
-            <tr>
-                <th>Grade category</th>
-                <th>Grade item</th>
-                <th>Weight</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.ViewGrade.GradeTypes.Count; i++)
+            @if (Model.ListSession != null && Model.ListSession.Count > 0)
             {
-                var gradeType = Model.ViewGrade.GradeTypes[i];
-                for (int j = 0; j < gradeType.Grades.Count; j++)
-                {
-                    var grade = gradeType.Grades[j];
-                    if (j == 0)
-                    {
+                <table class="table-custom">
+                    <thead>
                         <tr>
-                            <td rowspan="@(gradeType.Grades.Count)">@gradeType.GradeTypeName</td>
-                            <td>@grade.GradeName</td>
-                            <td>@grade.Weight %</td>
-                            <td>@grade.Value</td>
+                            <th> Session Name</th>
                         </tr>
-                    }
-                    else
-                    {
-                        <tr>
-                            <td>@grade.GradeName</td>
-                            <td>@grade.Weight %</td>
-                            <td>@grade.Value</td>
-                        </tr>
-                    }
-                }
+                    </thead>
+                    <tbody>
+                        @foreach (var session in Model.ListSession)
+                        {
+                            <tr>
+                                <td class="session text-primary">
+                                    <a asp-page-handler="Grade"
+                               asp-route-sessionId="@session.Id"
+                               asp-route-courseId="@session.CourseId"
+                               asp-route-courseName="@session.CourseName"
+                               asp-route-className="@session.ClassName"
+                               asp-route-teacherName="@session.TeacherName"
+                               title="View Grade">
+                                        @session.ClassName - @session.CourseName - @session.TeacherName
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td rowspan="2">Course total</td>
-                <td>Average</td>
-                <td colspan="3">@Model.Avg</td>
-            </tr>
-            <tr>
-                <td>Status</td>
-                <td colspan="3" class="status">
-                    @if (Model.Status.isPass)
-                    {
-                        <span class="passed">PASSED</span>
-                    }
-                    else
-                    {
-                        <span class="not-passed">NOT PASSED</span>
-                       @*  <br />
-                        <span>@Model.Status.msg</span> *@
-                    }
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-
+            else
+            {
+                <p>There are no sessions.</p>
+            }
+            
+        </div>
+        @if (Model.SessionId != null && Model.CourseId != null && Model.CourseName != null && Model.ClassName != null && Model.TeacherName != null)
+        {
+            <div class="ms-3">
+                <div>
+                    <a class="export-link" asp-page-handler="ExportExcel"
+                   asp-route-courseId="@Model.CourseId"
+                   asp-route-courseName="@Model.CourseName">
+                        Export to Excel
+                    </a>
+                </div>
+                <table summary="Report">
+                    <thead>
+                        <tr>
+                            <th>Grade category</th>
+                            <th>Grade item</th>
+                            <th>Weight</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.ViewGrade.GradeTypes.Count; i++)
+                        {
+                            var gradeType = Model.ViewGrade.GradeTypes[i];
+                            for (int j = 0; j < gradeType.Grades.Count; j++)
+                            {
+                                var grade = gradeType.Grades[j];
+                                if (j == 0)
+                                {
+                                    <tr>
+                                        <td rowspan="@(gradeType.Grades.Count)">@gradeType.GradeTypeName</td>
+                                        <td>@grade.GradeName</td>
+                                        <td>@grade.Weight %</td>
+                                        <td>@grade.Value</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@grade.GradeName</td>
+                                        <td>@grade.Weight %</td>
+                                        <td>@grade.Value</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td rowspan="2">Course total</td>
+                            <td>Average</td>
+                            <td colspan="3">@Model.Avg</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td colspan="3" class="status">
+                                @if (Model.Status.isPass)
+                                {
+                                    <span class="passed">PASSED</span>
+                                }
+                                else
+                                {
+                                    <span class="not-passed">NOT PASSED</span>
+                                    @*  <br />
+                            <span>@Model.Status.msg</span> *@
+                                }
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            
+        }
+    </div>
 
     <a class="back-link" asp-page="/student/Index">
         Back
     </a>
-    @*     <table summary="Report">
-    <thead>
-    <tr>
-    <th>Grade category</th>
-    <th>Grade item</th>
-    <th>Weight</th>
-    <th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td rowspan="4">Assignment</td>
-    <td>Assignment 1</td>
-    <td>3.3%</td>
-    <td>7</td>
-    </tr>
-    <tr>
-    <td>Assignment 2</td>
-    <td>3.3%</td>
-    <td>7.5</td>
-    </tr>
-    <tr>
-    <td>Assignment 3</td>
-    <td>3.3%</td>
-    <td>8</td>
-    </tr>
-    <tr>
-    <td>Total</td>
-    <td>10.0%</td>
-    <td>7.5</td>
-    </tr>
-    <tr>
-    <td rowspan="3">Progress test</td>
-    <td>Progress test 1</td>
-    <td>5.0%</td>
-    <td>10</td>
-    </tr>
-    <tr>
-    <td>Progress test 2</td>
-    <td>5.0%</td>
-    <td>10</td>
-    </tr>
-    <tr>
-    <td>Total</td>
-    <td>10.0%</td>
-    <td>10</td>
-    </tr>
-    <tr>
-    <td rowspan="2">Group Project</td>
-    <td>Group Project</td>
-    <td>25.0%</td>
-    <td>10</td>
-    </tr>
-    <tr>
-    <td>Total</td>
-    <td>25.0%</td>
-    <td>10</td>
-    </tr>
-    <tr>
-    <td rowspan="2">Practical Exam</td>
-    <td>Practical Exam</td>
-    <td>25.0%</td>
-    <td>4.5</td>
-    </tr>
-    <tr>
-    <td>Total</td>
-    <td>25.0%</td>
-    <td>4.5</td>
-    </tr>
-    <tr>
-    <td rowspan="2">Final exam</td>
-    <td>Final exam</td>
-    <td>30.0%</td>
-    <td>6.4</td>
-    </tr>
-    <tr>
-    <td>Total</td>
-    <td>30.0%</td>
-    <td>6.4</td>
-    </tr>
 
-    <tr>
-    <td>Total</td>
-    <td>30.0%</td>
-    <td></td>
-    </tr>
-    </tbody>
-    <tfoot>
-    <tr>
-    <td rowspan="2">Course total</td>
-    <td>Average</td>
-    <td colspan="3">7.3</td>
-    </tr>
-    <tr>
-    <td>Status</td>
-    <td colspan="3" class="status">Passed</td>
-    </tr>
-    </tfoot>
-    </table>
-    *@
 </body>
 </html>

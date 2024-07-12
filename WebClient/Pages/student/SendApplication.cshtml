@@ -169,7 +169,7 @@
             <div class="user-details">
                 <div class="input-box">
                     <span class="details">Student Roll No (MS HSSV):</span>
-                    <input type="text" class="inp" readonly placeholder="Student Roll No (MS HSSV)" id="RollNumber" name="id" value="@Model.Student.Id">
+                    <input type="text" class="inp" readonly placeholder="Student Roll No (MS HSSV)" id="RollNumber" name="studentId" value="@Model.Student.Id">
                 </div>
                 <div class="input-box">
                     <span class="details">Student name (Họ và tên):</span>
@@ -192,7 +192,7 @@
                 </div>
 
                  <div class="input-box">
-                      <span class="details">Kỳ thi / Exam type(FE,PE only):</span>
+                      <span class="details">Kỳ thi / Exam type:</span>
                        <select class="form-control" style="width:300px;" id="grade" name="gradeId" required>
                             @if (Model.ListSession != null)
                             {

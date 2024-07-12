@@ -37,6 +37,7 @@ body {
 }
 
 .title {
+    text-align: center;
     color: #009879;
 }
 
@@ -175,3 +176,35 @@ body {
         transform: scale(1.05);
     }
 
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+    .button-group .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .button-group .btn-primary {
+        background-color: #009879;
+        color: white;
+        border: none;
+    }
+
+        .button-group .btn-primary:hover {
+            background-color: #007964;
+        }
+
+    .button-group .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+
+        .button-group .btn-secondary:hover {
+            background-color: #5a6268;
+        }

@@ -26,7 +26,7 @@ namespace WebClient.Pages.student
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public IActionResult OnGet(int? sessionId, int? gradeId, string? content, string isSubmit)
+        public IActionResult OnGet(int? studentId, int? sessionId, int? gradeId, string? content, string isSubmit)
         {
             string userJson = _httpContextAccessor.HttpContext.Session.GetString("currentUser");
             GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
@@ -36,13 +36,21 @@ namespace WebClient.Pages.student
             {
                 u = UserService.GetStudent(u.Username);
 
+
                 userJson = JsonSerializer.Serialize(u);
                 _httpContextAccessor.HttpContext.Session.SetString("currentUser", userJson);
 
                 Student = u;
 
-
                 ListSession = SessionService.GetSessionByStudent(u.Id);
+
+                if (studentId != null && u.Id != studentId)
+                {
+                    Msg = $"Hey {u.Username}, What are you doing ?";
+                    ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);
+                    return Page();
+                }
+
                 if (sessionId == null)
                 {
                     ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);

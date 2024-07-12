@@ -1,0 +1,35 @@
+﻿@page
+@model WebClient.Pages.admin.IndexModel
+@{
+}
+<h2 class="title">Grading Distribution</h2>
+
+
+@if (Model.ListCourse != null && Model.ListCourse.Count > 0)
+{
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th> Course Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model.ListCourse)
+            {
+                <tr>
+                    <td>
+                        <a asp-page="/teacher/ListGrade"
+                           asp-route-courseId="@course.Id"
+                           title="Grading Distributio for this course">
+                            @course.Code
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>There are no sessions.</p>
+}

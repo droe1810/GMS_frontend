@@ -80,15 +80,19 @@ namespace WebClient.Services
         {
             bool result = false;
             HttpClient client = new HttpClient();
-            string url = $"http://localhost:5100/api/StudentGrade/DeleteStudentGrade/{gradeId}/{studentId}\r\n";
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            string url = $"http://localhost:5100/api/StudentGrade/DeleteStudentGrade/{gradeId}/{studentId}";
+
+            // Sử dụng phương thức DeleteAsync để gọi API DELETE
+            HttpResponseMessage response = client.DeleteAsync(url).Result;
+
+            if (response.IsSuccessStatusCode)
             {
                 result = response.Content.ReadFromJsonAsync<bool>().Result;
             }
 
             return result;
         }
+
 
         public static StudentViewGradeDTO StudentViewGrade(int studentId, int courseId)
         {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebClient.DTO.Session
+﻿namespace WebClient.DTO.Session
 {
     public class GetSessionDTO
     {

@@ -10,5 +10,12 @@ namespace WebClient.DTO.GradeType
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
+
+        public int GradedByRoleId { get; set; }
+        public string GradedByRoleName { get; set; }
+
+        public string ComparisonType { get; set; }
+
+        public int ComparisonValue { get; set; }
     }
 }

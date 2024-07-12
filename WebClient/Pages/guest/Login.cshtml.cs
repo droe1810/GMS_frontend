@@ -32,7 +32,7 @@ namespace WebClient.Pages.guest
 
                     if (authenticatedUser.RoleId == 1)
                     {
-                        return RedirectToPage("/Index");
+                        return RedirectToPage("/admin/index");
                     }
                     else if (authenticatedUser.RoleId == 2)
                     {

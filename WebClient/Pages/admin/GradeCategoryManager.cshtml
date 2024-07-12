@@ -1,0 +1,194 @@
+﻿@page
+@using WebClient.DTO.ComparisonType
+@model WebClient.Pages.admin.GradeCategoryManagerModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper , Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+}
+<style>
+    .centered {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        flex-wrap: wrap;
+    }
+
+        .form-container input[type="text"],
+        .form-container input[type="number"],
+        .form-container select,
+        .form-container label {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .form-container label {
+            margin-right: 20px;
+        }
+
+        .form-container .radio-group {
+            display: flex;
+            align-items: center;
+            margin-left: 28px;
+            margin-right: 120px;
+        }
+
+        .form-container input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .form-container input[type="submit"] {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+            .form-container input[type="submit"]:hover {
+                background-color: #45a049;
+            }
+
+        .form-container .title {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+    .delete-button {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+        .delete-button:hover {
+            background-color: darkred;
+        }
+</style>
+
+<h2 class="title">Grade Category Manager</h2>
+<form method="post" asp-page-handler="Add" class="form-container">
+    <input type="text" asp-for="GradeType.Name" placeholder="GradeType Name" required />
+    <br />
+    <div class="radio-group">
+        @foreach (var role in Model.ListRoleGraded)
+        {
+            <label>
+                <input type="radio" value="@role.RoleId" asp-for="GradeType.GradedByRole" required /> @role.RoleName
+            </label>
+        }
+    </div>
+    <select asp-for="GradeType.ComparasionTypeId">
+        @foreach (var cp in Model.ListComparisonTypes)
+        {
+            <option value="@cp.Id">@cp.Name</option>
+        }
+    </select>
+    <br />
+    <input type="number" asp-for="GradeType.GradeValue" min="0" max="10" step="1" required />
+    <br />
+    <input type="submit" value="Create" />
+</form>
+
+@if (!String.IsNullOrEmpty(Model.Msg))
+{
+    <p id="errorMessage" class="error-message">@Model.Msg</p>
+}
+
+@if (Model.ListGradeTypes != null && Model.ListGradeTypes.Count > 0)
+{
+    <form method="post" asp-page-handler="Update">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>GradeType Name</th>
+                    <th>Graded By</th>
+                    <th>Pass condition</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var gradeType in Model.ListGradeTypes)
+                {
+                    <tr>
+                        <td>
+                            @gradeType.Name
+                        </td>
+                        <td>
+                            @foreach (var role in Model.ListRoleGraded)
+                            {
+                                <label>
+                                    <input type="radio" name="gradedByRoleId_@gradeType.Id" value="@role.RoleId" @(role.RoleId == gradeType.GradedByRoleId ? "checked" : "") /> @role.RoleName
+                                </label>
+                            }
+                        </td>
+
+                        <td>
+                            <select name="comparasionType_@gradeType.Id">
+                                @foreach (var cp in Model.ListComparisonTypes)
+                                {
+                                    <option value="@cp.Name" @(cp.Name == gradeType.ComparisonType ? "selected" : "")>@cp.Name</option>
+                                }
+                            </select>
+
+                            <input type="number" name="comparisonValue_@gradeType.Id" value="@gradeType.ComparisonValue" min="0" max="10" step="1" />
+
+                            <input type="hidden" name="gradeTypeId_@gradeType.Id" value="@gradeType.Id" />
+                        </td>
+
+                        <td class="centered">
+                            <button type="button" class="delete-button" onclick="submitDeleteForm(@gradeType.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-success">Update</button>
+            <a class="btn btn-secondary" asp-page="/admin/Index">Back</a>
+        </div>
+    </form>
+
+    <form id="delete-form" method="post" asp-page-handler="Delete" style="display:none;">
+        <input type="hidden" name="gradeTypeId" id="delete-gradeTypeId" />
+    </form>
+}
+else
+{
+    <p>There are no gradeTypes.</p>
+}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const errorMessage = document.getElementById("errorMessage");
+        if (errorMessage) {
+            setTimeout(function () {
+                errorMessage.style.display = "none";
+            }, 3000);
+        }
+    });
+
+    function submitDeleteForm(gradeTypeId) {
+        const deleteForm = document.getElementById('delete-form');
+        const deleteGradeTypeIdInput = document.getElementById('delete-gradeTypeId');
+        deleteGradeTypeIdInput.value = gradeTypeId;
+        deleteForm.submit();
+    }
+</script>

@@ -53,6 +53,22 @@ namespace WebClient.Pages.khaothi
                 return Redirect("/AccessDenied");
             }
 
+            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+            if (!semesterOnGoing)
+            {
+                Msg = "Graded Fail. Semester is not started";
+                try
+                {
+                    GetData(courseId, courseName, gradeId, gradeName);
+                }
+                catch (Exception)
+                {
+                    return RedirectToPage("/SeverError");
+                }
+
+                return Page();
+            }
+
             try
             {
                 for (int i = 0; i < studentIds.Count; i++)

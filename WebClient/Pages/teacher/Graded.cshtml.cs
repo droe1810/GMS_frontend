@@ -59,6 +59,22 @@ namespace WebClient.Pages.teacher
                 return Redirect("/AccessDenied");
             }
 
+            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+            if(!semesterOnGoing) {
+                Msg = "Graded Fail. Semester is not started";
+                try
+                {
+                    GetData(sessionId, className, courseName, gradeId, gradeName);
+
+                }
+                catch (Exception)
+                {
+                    return RedirectToPage("/SeverError");
+                }
+
+                return Page();
+            }
+
             int countFalse = 0;
             for (int i = 0; i < studentIds.Count; i++)
             {

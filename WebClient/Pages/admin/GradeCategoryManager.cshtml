@@ -83,8 +83,13 @@
 </style>
 
 <h2 class="title">Grade Category Manager</h2>
-<form method="post" asp-page-handler="Add" class="form-container">
-    <input type="text" asp-for="GradeType.Name" placeholder="GradeType Name" required />
+<form method="post" asp-page-handler="Add" class="form-container" onsubmit="return validateForm()">
+    <input type="text" asp-for="GradeType.Name" id="gradeTypeName" placeholder="GradeType Name" required />
+    <span asp-validation-for="GradeType.Name" class="text-danger error-message"></span>
+
+    <br />
+    <span asp-validation-for="GradeType.Name" class="error-message"></span>
+
     <br />
     <div class="radio-group">
         @foreach (var role in Model.ListRoleGraded)
@@ -186,9 +191,20 @@ else
     });
 
     function submitDeleteForm(gradeTypeId) {
-        const deleteForm = document.getElementById('delete-form');
-        const deleteGradeTypeIdInput = document.getElementById('delete-gradeTypeId');
-        deleteGradeTypeIdInput.value = gradeTypeId;
-        deleteForm.submit();
-    }
+        if (confirm("Are you sure you want to delete this grade type?")) {
+            const deleteForm = document.getElementById('delete-form');
+            const deleteGradeTypeIdInput = document.getElementById('delete-gradeTypeId');
+            deleteGradeTypeIdInput.value = gradeTypeId;
+            deleteForm.submit();
+            }
+        }
+
+        function validateForm() {
+            const gradeTypeName = document.getElementById("gradeTypeName").value.trim();
+            if (gradeTypeName === "") {
+                alert("Please fill out GradeType Name.");
+                return false;
+            }
+            return true;
+        }
 </script>

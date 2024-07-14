@@ -15,6 +15,19 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebClient.styles.css" asp-append-version="true" />
+
+    <style>
+        .dropdown-submenu {
+            position: relative;
+        }
+
+            .dropdown-submenu .dropdown-menu {
+                top: 0;
+                left: 100%;
+                margin-top: -1px;
+            }
+    </style>
+
 </head>
 <body>
     <header>
@@ -28,22 +41,54 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
-@*                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="#">Home</a>
+                            @*                             <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="#">Home</a>
                             </li> *@
                             @if (user != null && user.isAdmin(user.RoleId))
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Manager
+                                        Grading Distribution
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" asp-area="" asp-page="/admin/GradeCategoryManager">Grade Category Manager</a>
-                                        <a class="dropdown-item" asp-area="" asp-page="/admin/Index">Grading Distribution</a>
+                                        <a class="dropdown-item" asp-area="" asp-page="">Distribute multiple</a>
+                                        <div class="dropdown-submenu">
+                                            <a class="dropdown-item dropdown-toggle" href="#">Distribute Single</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="" asp-page="/admin/SingleDistribution"
+                                                       asp-route-courseId="1" asp-route-courseName="PRN231">
+                                                        PRN231
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="" asp-page="/admin/SingleDistribution"
+                                                       asp-route-courseId="2" asp-route-courseName="PRN221">
+                                                        PRN221
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="" asp-page="/admin/SingleDistribution"
+                                                       asp-route-courseId="3" asp-route-courseName="PRN211">
+                                                        PRN211
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-area="" asp-page="/admin/SingleDistribution"
+                                                       asp-route-courseId="4" asp-route-courseName="ENW492c">
+                                                        ENW492c
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/admin/GradeCategoryManager">Grade Category Manager</a>
+                                </li>
                             }
+
 
                             @if (user != null && user.isKhaoThi(user.RoleId))
                             {

@@ -47,6 +47,8 @@ namespace WebClient.Pages.khaothi
                 return Redirect("/AccessDenied");
             }
 
+
+
             try
             {
                 GetUserDTO u = UserService.GetStudent(username);
@@ -75,6 +77,20 @@ namespace WebClient.Pages.khaothi
                         CurrentGradeId = (int)gradeId;
                         if (newGradeValue != null)
                         {
+                            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+                            if (!semesterOnGoing)
+                            {
+                                Msg = "Graded Fail. Semester is not started";
+                                return Page();
+                            }
+
+                            bool exist = StudentGradeService.CheckStudentGradeExist((int)gradeId, u.Id);
+                            if (!exist)
+                            {
+                                Msg = "Update fail. Student Grade is not exist";
+                                return Page();
+                            }
+
                             bool updateSuccess = StudentGradeService.UpdateGradeForStudent((int)gradeId, u.Id, (decimal)newGradeValue);
 
                             if (updateSuccess)

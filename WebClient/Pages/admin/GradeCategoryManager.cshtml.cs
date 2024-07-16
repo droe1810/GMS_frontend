@@ -57,6 +57,22 @@ namespace WebClient.Pages.admin
                 return Redirect("/AccessDenied");
             }
 
+            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+            if (semesterOnGoing)
+            {
+                Msg = "Create Fail. Semester is on going";
+                try
+                {
+                    GetData();
+                }
+                catch (Exception)
+                {
+                    return RedirectToPage("/SeverError");
+                }
+
+                return Page();
+            }
+
 
             if (!ModelState.IsValid)
             {
@@ -83,6 +99,22 @@ namespace WebClient.Pages.admin
             if (user == null || !AuthenticationHelper.IsAdmin(user))
             {
                 return Redirect("/AccessDenied");
+            }
+
+            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+            if (semesterOnGoing)
+            {
+                Msg = "Update Fail. Semester is on going";
+                try
+                {
+                    GetData();
+                }
+                catch (Exception)
+                {
+                    return RedirectToPage("/SeverError");
+                }
+
+                return Page();
             }
 
 
@@ -125,6 +157,22 @@ namespace WebClient.Pages.admin
             if (user == null || !AuthenticationHelper.IsAdmin(user))
             {
                 return Redirect("/AccessDenied");
+            }
+
+            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+            if (semesterOnGoing)
+            {
+                Msg = "Delete Fail. Semester is on going";
+                try
+                {
+                    GetData();
+                }
+                catch (Exception)
+                {
+                    return RedirectToPage("/SeverError");
+                }
+
+                return Page();
             }
 
             try

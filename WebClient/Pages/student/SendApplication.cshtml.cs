@@ -28,9 +28,10 @@ namespace WebClient.Pages.student
 
         public IActionResult OnGet(int? studentId, int? sessionId, int? gradeId, string? content, string isSubmit)
         {
+
+
             string userJson = _httpContextAccessor.HttpContext.Session.GetString("currentUser");
             GetUserDTO u = JsonSerializer.Deserialize<GetUserDTO>(userJson);
-
 
             try
             {
@@ -43,6 +44,14 @@ namespace WebClient.Pages.student
                 Student = u;
 
                 ListSession = SessionService.GetSessionByStudent(u.Id);
+
+                bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+                if(!semesterOnGoing)
+                {
+                    Msg = "Send Application Fail. Semester is not started";
+                    ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);
+                    return Page();
+                }
 
                 if (studentId != null && u.Id != studentId)
                 {

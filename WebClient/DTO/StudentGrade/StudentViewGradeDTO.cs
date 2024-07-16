@@ -23,6 +23,6 @@
         public int GradeId { get; set; }
         public string GradeName { get; set; }
         public int Weight { get; set; }
-        public decimal? Value { get; set; }
+        public string Value { get; set; }
     }
 }

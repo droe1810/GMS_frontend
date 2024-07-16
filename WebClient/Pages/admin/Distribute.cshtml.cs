@@ -8,11 +8,11 @@ using WebClient.Services;
 
 namespace WebClient.Pages.admin
 {
-    public class SingleDistributionModel : PageModel
+    public class DistributeModel : PageModel
     {
 
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public SingleDistributionModel()
+        public DistributeModel()
         {
             _httpContextAccessor = new HttpContextAccessor();
         }
@@ -53,8 +53,19 @@ namespace WebClient.Pages.admin
             {
                 return Redirect("/AccessDenied");
             }
+
+          
+
             try
             {
+                bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+                if (semesterOnGoing)
+                {
+                    Msg = "Create Fail. Semester is on going";
+                    GetData(courseId, courseName);
+                    return Page();
+                }
+
                 GetData(courseId, courseName);
                 int length = gradeTypeSelect.Count();
 

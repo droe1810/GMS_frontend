@@ -85,10 +85,7 @@
 <h2 class="title">Grade Category Manager</h2>
 <form method="post" asp-page-handler="Add" class="form-container" onsubmit="return validateForm()">
     <input type="text" asp-for="GradeType.Name" id="gradeTypeName" placeholder="GradeType Name" required />
-    <span asp-validation-for="GradeType.Name" class="text-danger error-message"></span>
 
-    <br />
-    <span asp-validation-for="GradeType.Name" class="error-message"></span>
 
     <br />
     <div class="radio-group">

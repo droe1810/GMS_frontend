@@ -1,40 +1,62 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using TimetableSystem.Services;
-using WebClient.DTO.Course;
-using WebClient.DTO.User;
-using WebClient.Services;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebClient.Pages.admin
 {
     public class IndexModel : PageModel
     {
-        public List<CourseDTO> ListCourse { get; set; }
+        private readonly ILogger<IndexModel> _logger;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public IndexModel()
+        public IndexModel(ILogger<IndexModel> logger)
         {
-            _httpContextAccessor = new HttpContextAccessor();
+            _logger = logger;
         }
-        public IActionResult OnGet()
+        public string AsciiArt { get; set; }
+
+        public void OnGet()
         {
-            GetUserDTO user = AuthenticationHelper.GetAuthenticatedUser(_httpContextAccessor.HttpContext);
-
-            if (user == null || !AuthenticationHelper.IsAdmin(user))
+            var asciiArts = new List<string>
             {
-                return Redirect("/AccessDenied");
-            }
+                @"
+?  ╱|、
+(˚ˎ 。7  
+        |、˜〵          
+じしˍ,)ノ
+                ",
+                @"
+ /\\_/\\
+( o.o )
+ > ^ <
+                ",
+                @"
+ / \__
+(    @\___
+ /         O
+/   (_____/
+/_____/ U
+                ",
+                @"
+  _~_
+ (o o)
+/  V  \\
+/(   )\\
+ ^-^-^
+                ",
+                @"
+ (\(\ 
+ ( -.-)
+ o_(\)(\)
+                ",
+                @"
+  _  
+<(o )___
+ (    ___)
+  (___)
+                "
+            };
 
-            try
-            {
-                ListCourse = CourseService.GetCourses();
-            }
-            catch
-            {
-                return Redirect("/SeverError");
-            }
-
-            return Page();
+            var random = new Random();
+            int index = random.Next(asciiArts.Count);
+            AsciiArt = asciiArts[index];
         }
     }
 }

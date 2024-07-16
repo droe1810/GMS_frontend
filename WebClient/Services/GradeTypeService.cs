@@ -2,6 +2,7 @@
 using System.Text;
 using WebClient.DTO.Course;
 using WebClient.DTO.GradeType;
+using WebClient.DTO.Session;
 using WebClient.DTO.StudentGrade;
 
 namespace WebClient.Services
@@ -79,6 +80,20 @@ namespace WebClient.Services
             }
 
             return result;
+        }
+
+        public static GradeDistributionDTO GetGradeDistribution(int gradeTypeId, int courseId)
+        {
+            GradeDistributionDTO gd = new GradeDistributionDTO();
+             HttpClient client = new HttpClient();
+            string url = $"http://localhost:5100/api/GradeType/GetDistribution/{gradeTypeId}/{courseId}\r\n";
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                gd = response.Content.ReadFromJsonAsync<GradeDistributionDTO>().Result;
+            }
+
+            return gd;
         }
     }
 }

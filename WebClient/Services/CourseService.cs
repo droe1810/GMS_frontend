@@ -18,5 +18,13 @@ namespace WebClient.Services
 
             return List;
         }
+        public static bool DeleteGradeDistribution(int courseId)
+        {
+            HttpClient client = new HttpClient();
+            string url = $"http://localhost:5100/api/Course/DeleteGradeDistribution/{courseId}";
+            HttpResponseMessage response = client.DeleteAsync(url).Result;
+            return response.StatusCode == System.Net.HttpStatusCode.OK;
+        }
+
     }
 }

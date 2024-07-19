@@ -78,30 +78,32 @@ else
     <p>There are no applications</p>
 }
 
-<script>
-    function sortTable(ascending) {
-        var table = document.querySelector('.table tbody');
-        var rows = Array.from(table.querySelectorAll('tr[data-request-status-id]'));
+    <script>
+        function sortTable(ascending) {
+            var table = document.querySelector('.table tbody');
+            var rows = Array.from(table.querySelectorAll('tr[data-request-status-id]'));
 
-        rows.sort(function (a, b) {
-            var statusA = parseInt(a.getAttribute('data-request-status-id'));
-            var statusB = parseInt(b.getAttribute('data-request-status-id'));
+            rows.sort(function (a, b) {
+                var statusA = parseInt(a.getAttribute('data-request-status-id'));
+                var statusB = parseInt(b.getAttribute('data-request-status-id'));
 
-            if (ascending) {
-                return statusA - statusB;
-            } else {
-                return statusB - statusA;
+                if (ascending) {
+                    return statusA - statusB;
+                } else {
+                    return statusB - statusA;
+                }
+            });
+
+            // Xóa các hàng hiện tại trong bảng
+            while (table.firstChild) {
+                table.removeChild(table.firstChild);
             }
-        });
 
-        // Xóa các hàng hiện tại trong bảng
-        while (table.firstChild) {
-            table.removeChild(table.firstChild);
+            // Thêm các hàng đã sắp xếp trở lại vào bảng
+            rows.forEach(function (row) {
+                table.appendChild(row);
+            });
         }
+    </script>
 
-        // Thêm các hàng đã sắp xếp trở lại vào bảng
-        rows.forEach(function (row) {
-            table.appendChild(row);
-        });
-    }
-</script>
+</div>

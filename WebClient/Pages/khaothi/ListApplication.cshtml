@@ -15,91 +15,98 @@
         }
 </style>
 
-
-<table>
-    <tbody>
-        <tr style="border-bottom: 0 none">
-            <td>
-                <div>
-                    <h2>Thông tin xử lý đơn từ</h2>
-                    @if (!String.IsNullOrEmpty(Model.Msg))
-                    {
-                        <p class="error-message" id="errorMessage">@Model.Msg</p>
-                    }
-                    <p>
-                        <span id="ctl00_mainContent_lblFinanceInfo" style="font-weight: 700"></span>
-                    </p>
-                    <div id="ctl00_mainContent_content">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>
-                                        <span class="header-with-arrows">
-                                            Student
-                                            <a href="#" onclick="sortTable('student', true)">&#9650;</a>
-                                            <a href="#" onclick="sortTable('student', false)">&#9660;</a>
-                                        </span>
-                                    </th>
-                                    <th>
-                                        <span class="header-with-arrows">
-                                            Course
-                                            <a href="#" onclick="sortTable('course', true)">&#9650;</a>
-                                            <a href="#" onclick="sortTable('course', false)">&#9660;</a>
-                                        </span>
-                                    </th>
-                                    <th>
-                                        <span class="header-with-arrows">
-                                            Exam
-                                            <a href="#" onclick="sortTable('exam', true)">&#9650;</a>
-                                            <a href="#" onclick="sortTable('exam', false)">&#9660;</a>
-                                        </span>
-                                    </th>
-                                    <th>RequestContent</th>
-                                    <th>
-                                        <span class="header-with-arrows">
-                                            Status
-                                            <a href="#" onclick="sortTable('status', true)">&#9650;</a>
-                                            <a href="#" onclick="sortTable('status', false)">&#9660;</a>
-                                        </span>
-                                    </th>
-                                    <th style="width: auto">Regraded grade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var request in Model.ListRequest)
-                                {
-                                    <form method="post">
-                                    <tr data-request-status-id="@request.RequestStatusId" data-course="@request.CourseCode" data-exam="@request.GradeName" data-student="@request.StudentName">
-                                        <td>Đề nghị phúc tra</td>
-                                        <td>@request.StudentId - @request.StudentName</td>
-                                        <td>@request.CourseCode</td>
-                                        <td>@request.GradeName</td>
-                                        <td>@request.RequestContent</td>
-                                        <td><p class="text-success"><b>@request.StatusName</b></p></td>
-                                        <td>
-                                                @if (request.RequestStatusId == 1)
-                                                {
-                                                <input type="number" min="0" max="10" step="1" name="newGrade"  required/>
-                                                <input type="hidden" name="requestId" value="@request.RequestId" />
-                                                <input type="hidden" name="studentId" value="@request.StudentId" />
-                                                <input type="hidden" name="gradeId" value="@request.GradeId" />
-                                                <input type="submit" value="Submit" />
-                                                }
-                                        </td>
+@if (Model.ListRequest != null && Model.ListRequest.Count > 0)
+{
+    <table>
+        <tbody>
+            <tr style="border-bottom: 0 none">
+                <td>
+                    <div>
+                        <h2>Thông tin xử lý đơn từ</h2>
+                        @if (!String.IsNullOrEmpty(Model.Msg))
+                        {
+                            <p class="error-message" id="errorMessage">@Model.Msg</p>
+                        }
+                        <p>
+                            <span id="ctl00_mainContent_lblFinanceInfo" style="font-weight: 700"></span>
+                        </p>
+                        <div id="ctl00_mainContent_content">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>
+                                            <span class="header-with-arrows">
+                                                Student
+                                                <a href="#" onclick="sortTable('student', true)">&#9650;</a>
+                                                <a href="#" onclick="sortTable('student', false)">&#9660;</a>
+                                            </span>
+                                        </th>
+                                        <th>
+                                            <span class="header-with-arrows">
+                                                Course
+                                                <a href="#" onclick="sortTable('course', true)">&#9650;</a>
+                                                <a href="#" onclick="sortTable('course', false)">&#9660;</a>
+                                            </span>
+                                        </th>
+                                        <th>
+                                            <span class="header-with-arrows">
+                                                Exam
+                                                <a href="#" onclick="sortTable('exam', true)">&#9650;</a>
+                                                <a href="#" onclick="sortTable('exam', false)">&#9660;</a>
+                                            </span>
+                                        </th>
+                                        <th>RequestContent</th>
+                                        <th>
+                                            <span class="header-with-arrows">
+                                                Status
+                                                <a href="#" onclick="sortTable('status', true)">&#9650;</a>
+                                                <a href="#" onclick="sortTable('status', false)">&#9660;</a>
+                                            </span>
+                                        </th>
+                                        <th style="width: auto">Regraded grade</th>
                                     </tr>
-                                    </form>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var request in Model.ListRequest)
+                                    {
+                                        <form method="post">
+                                        <tr data-request-status-id="@request.RequestStatusId" data-course="@request.CourseCode" data-exam="@request.GradeName" data-student="@request.StudentName">
+                                            <td>Đề nghị phúc tra</td>
+                                            <td>@request.StudentId - @request.StudentName</td>
+                                            <td>@request.CourseCode</td>
+                                            <td>@request.GradeName</td>
+                                            <td>@request.RequestContent</td>
+                                            <td><p class="text-success"><b>@request.StatusName</b></p></td>
+                                            <td>
+                                                    @if (request.RequestStatusId == 1)
+                                                    {
+                                                    <input type="number" min="0" max="10" step="1" name="newGrade" required />
+                                                    <input type="hidden" name="requestId" value="@request.RequestId" />
+                                                    <input type="hidden" name="studentId" value="@request.StudentId" />
+                                                    <input type="hidden" name="gradeId" value="@request.GradeId" />
+                                                    <input type="submit" value="Submit" />
+                                                    }
+                                            </td>
+                                        </tr>
+                                        </form>
+                                    }
+                                </tbody>
+                            </table>
 
+                        </div>
+                        <span id="ctl00_mainContent_lblError"></span>
                     </div>
-                    <span id="ctl00_mainContent_lblError"></span>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+else
+{
+    <p>There are no applications</p>
+}
 
 <script>
     function sortTable(criteria, ascending) {

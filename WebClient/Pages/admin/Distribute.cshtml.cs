@@ -54,10 +54,9 @@ namespace WebClient.Pages.admin
                 return Redirect("/AccessDenied");
             }
 
-          
-
             try
             {
+                
                 bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
                 if (semesterOnGoing)
                 {
@@ -67,8 +66,8 @@ namespace WebClient.Pages.admin
                 }
 
                 GetData(courseId, courseName);
-                int length = gradeTypeSelect.Count();
 
+                int length = gradeTypeSelect.Count();
                 List<CreateGradeDTO> listToCreate = new List<CreateGradeDTO>();
                 for (int i = 0; i < length; i++)
                 {
@@ -89,7 +88,6 @@ namespace WebClient.Pages.admin
                 return Redirect("/SeverError");
             }
         }
-
 
         public void GetData(int courseId, string courseName)
         {

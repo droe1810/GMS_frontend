@@ -230,6 +230,14 @@
             form.submit();
         });
 
+                // Hide the error message after 3 seconds
+                const errorMessage = document.getElementById("errorMessage");
+                if (errorMessage) {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                    }, 3000);
+                }
+
 
     });
 </script>

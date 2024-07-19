@@ -45,20 +45,7 @@ namespace WebClient.Pages.student
 
                 ListSession = SessionService.GetSessionByStudent(u.Id);
 
-                bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
-                if(!semesterOnGoing)
-                {
-                    Msg = "Send Application Fail. Semester is not started";
-                    ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);
-                    return Page();
-                }
 
-                if (studentId != null && u.Id != studentId)
-                {
-                    Msg = $"Hey {u.Username}, What are you doing ?";
-                    ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);
-                    return Page();
-                }
 
                 if (sessionId == null)
                 {
@@ -75,6 +62,21 @@ namespace WebClient.Pages.student
 
                         if (!string.IsNullOrEmpty(isSubmit))
                         {
+                            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+                            if (!semesterOnGoing)
+                            {
+                                Msg = "Send Application Fail. Semester is not started";
+                                ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);
+                                return Page();
+                            }
+
+                            if (studentId != null && u.Id != studentId)
+                            {
+                                Msg = $"Hey {u.Username}, What are you doing ?";
+                                ListGrade = GradeService.GetGradesBySessionGradedByKhaoThi(ListSession[0].Id);
+                                return Page();
+                            }
+
                             ResultForCreateRequestDTO result = RequestService.CreateRequest(u.Id, (int)gradeId, content);
                             if (result.IsSuccess == true)
                             {

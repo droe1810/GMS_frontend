@@ -138,9 +138,22 @@ body {
     color: red;
 }
 .back-link {
-    display: block;
+    display: inline-block;
     margin-top: 20px;
+    padding: 5px 10px; 
+    text-decoration: none;
+    background-color: #f0f0f0; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #000; 
+    cursor: pointer;
 }
+
+    .back-link:hover {
+        background-color: #e0e0e0; 
+        border-color: #bbb; 
+    }
+
 
 .button-link {
     display: inline-block;

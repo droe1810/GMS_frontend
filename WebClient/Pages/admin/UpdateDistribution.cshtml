@@ -110,7 +110,7 @@
         </div>
         <div id="gradeEntriesContainer">
             <div class="grade-entry">
-                <select name="gradeTypeSelect">
+                <select name="gradeTypeSelect" required>
                     @foreach (var gradeType in Model.ListGradeType)
                     {
                         <option value="@gradeType.Id">@gradeType.Name</option>

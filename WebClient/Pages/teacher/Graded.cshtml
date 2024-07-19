@@ -15,7 +15,7 @@
 
     @if (Model.ListUserDTO != null && Model.ListUserDTO.Count > 0)
     {
-        <form method="post" asp-page-handler="ImportFile" enctype="multipart/form-data">
+        <form method="post" asp-page-handler="Import" enctype="multipart/form-data">
             <input type="file" name="file" >
             <input type="hidden" name="gradeId" value="@Model.GradeId" />
             <input type="hidden" name="gradeName" value="@Model.GradeName" />

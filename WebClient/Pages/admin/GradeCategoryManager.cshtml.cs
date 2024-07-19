@@ -57,30 +57,23 @@ namespace WebClient.Pages.admin
                 return Redirect("/AccessDenied");
             }
 
-            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
-            if (semesterOnGoing)
-            {
-                Msg = "Create Fail. Semester is on going";
-                try
-                {
-                    GetData();
-                }
-                catch (Exception)
-                {
-                    return RedirectToPage("/SeverError");
-                }
-
-                return Page();
-            }
-
-
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
             try
             {
+                bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+                if (semesterOnGoing)
+                {
+                    Msg = "Create Fail. Semester is on going";
+                    GetData();
+                    return Page();
+                }
+
+
+                if (!ModelState.IsValid)
+                {
+                    return Page();
+                }
+
+
                 var success = GradeTypeService.CreateGradeType(GradeType);
                 GetData();
                 Msg = success ? "Create success" : "Create fail, duplicate name";
@@ -101,25 +94,21 @@ namespace WebClient.Pages.admin
                 return Redirect("/AccessDenied");
             }
 
-            bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
-            if (semesterOnGoing)
-            {
-                Msg = "Update Fail. Semester is on going";
-                try
-                {
-                    GetData();
-                }
-                catch (Exception)
-                {
-                    return RedirectToPage("/SeverError");
-                }
-
-                return Page();
-            }
-
 
             try
             {
+                bool semesterOnGoing = SemesterService.IsSemeterOnGoing();
+                if (semesterOnGoing)
+                {
+                    Msg = "Update Fail. Semester is on going";
+
+                    GetData();
+
+
+                    return Page();
+                }
+
+
                 var form = Request.Form;
 
                 ListGradeTypes = GradeTypeService.GetALlGradeType();
